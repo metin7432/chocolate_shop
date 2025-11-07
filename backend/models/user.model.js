@@ -44,6 +44,7 @@ timestamps: true
 
 // kayit oncesi hook ile passwordu hashliyoruz database kayydetmeden once
  
+// şemaya metot ekeleniyor
  userSchema.pre("save", async function (next) {
     if(!this.isModified("password")) return next();
 
@@ -58,6 +59,7 @@ timestamps: true
     }
  }) 
 
+ // şemaya metot ekeleniyor
  userSchema.methods.comparePassword = async function (password) {
     return bcrypt.compare(password, this.password) // db den gelen password ile kulunicidan gelen password karsilastirilir
  }

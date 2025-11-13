@@ -121,7 +121,7 @@ export const logout = async (req, res) => {
 			await redis.del(`refresh_token:${decoded.userId}`);
 		}
 
-        //4cookileri silem
+        //4cookileri silme
 		res.clearCookie("accessToken");
 		res.clearCookie("refreshToken");
 		res.json({ message: "Logged out successfully" }); // basarili ise logout edildigini bildir
@@ -131,3 +131,40 @@ export const logout = async (req, res) => {
 	}
 };
 //logout end
+
+export const refreshToken = async (req,res) => {
+	try {
+	const refreshToken = req.cookies.refreshToken; // istekten refreshToken degerini al
+	if(!refreshToken) { // eger yoksa hata firlat
+		return res.status(401).json({message: "No refresh token provided"});
+	};
+	const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET); // refreshToken ve secret kodunu dogrula
+	const storedToken = await redis.get(`refresh_token:${decoded.userId}`); // redisten userId vererek refreshTokeni bul ve ata
+
+	if(storedToken !== refreshToken) {  //rediste tutulan refrestoken ile istekten gelen refresh token eslesiyor mu?
+		//eslesmiyor ise hata firlat
+		return res.status(401).json({message: "invalid refresh token"});
+	}
+    
+	const accessToken =  jwt.sign({userId: decoded.userId}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "15m"});
+
+	res.cookie("accessToken", accessToken, {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === "production",
+		sameSite: "strict",
+		maxAge: 15*60*1000,
+	});
+
+	 res.json({message: "refresh token successfully"});
+
+	
+	} catch (error) {
+		console.log("Error in refresh token controller", error.message);
+		res.status(500).json({message: "server error", error: error.message});
+		
+	}
+}
+
+export const getProfile = async(req,res) => {
+ 
+}

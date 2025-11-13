@@ -1,0 +1,39 @@
+
+import { redis } from '../lib/redis.js';
+import Product from './../models/product.model.js';
+
+
+export const getAllProducts = async(req,res) => {
+
+    try {
+        const products = await Product.find({}) // find All Products
+        res.json({products}) // answer json type
+
+    } catch (error) {
+        console.log("Error in getAllProducts controller");
+        res.status(500).json({message: "server error", error: error.message })
+    }
+
+
+}
+
+export const getFeaturedProducts = async (req,res) => {
+try {
+    let featuredProducts = await redis.get("featured_products");
+    if (featuredProducts) {
+        return res.json(JSON.parse(featuredProducts))
+    }
+    //if not in redis fetch from mongodb
+    // lean() is gonna return a plain javascript object instead of a mongodb document(json)
+    // which is good performans
+    featuredProducts = await Product.find({isFeatured:true}).lean(); 
+    if (!featuredProducts) {
+         res.status(404).json({message: "No featured products found"})
+    }
+    await redis.set("featured_products", JSON.stringify(featuredProducts));
+
+    res.json(featuredProducts)
+} catch (error) {
+    res.status(500).json({message: " Server error", error:error.message})
+}
+}

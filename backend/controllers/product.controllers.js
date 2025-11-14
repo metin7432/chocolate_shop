@@ -1,5 +1,6 @@
 
 import { redis } from '../lib/redis.js';
+import  cloudinary  from '../lib/cloudinary.js';
 import Product from './../models/product.model.js';
 
 
@@ -37,3 +38,29 @@ try {
     res.status(500).json({message: " Server error", error:error.message})
 }
 }
+
+export const createProduct = async (req, res) => {
+    try {
+       
+      const { name, decription, price, image, category, isFeatured} =req.body
+       
+      let cloudinaryResponse = null
+
+      if (image) {
+      cloudinaryResponse = await cloudinary.uploader.upload(image,{folder:"products"})
+      }
+      
+      const product = await Product.create({ // Mongodbnin bize verdigi method create metodur
+        name,
+        decription,
+        price,
+        image: cloudinaryResponse.secure_url ? cloudinaryResponse.secure_url : "",
+        category
+      })
+        res.status(201).json(product)
+    } catch (error) {
+        console.log("Error in createProduct controller", error.message);
+         res.status(500).json({message: "Server Error", error: error.message})
+    }
+}
+

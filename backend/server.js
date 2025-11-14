@@ -16,6 +16,7 @@ app.use(cookieParser())
 app.use("/api/auth", AuthRouters); // "/api/auth/AuthRouters" -> /api/auth/signup seklinde adres cubuguna yazilir
 app.use("/api/products", productRouters); // "/api/auth/AuthRouters" -> /api/auth/signup seklinde adres cubuguna yazilir
 
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port} in active`);
     connectDB()

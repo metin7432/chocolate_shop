@@ -1,6 +1,6 @@
 
-import { redis } from '../lib/redis.js';
-import  cloudinary  from '../lib/cloudinary.js';
+import { redis } from '../lib/redis.js'; // tokenları tuttuğumuz key value tabanlı server
+import  cloudinary  from '../lib/cloudinary.js'; // resim barındırma
 import Product from './../models/product.model.js';
 
 

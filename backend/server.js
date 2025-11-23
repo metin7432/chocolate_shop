@@ -7,6 +7,7 @@ import productRouters from './routes/product.route.js'
 import cartRouters from './routes/cart.route.js'
 import couponRouters from './routes/coupon.route.js'
 import paymentRouters from './routes/payment.route.js'
+import analyticsRouters from './routes/analytics.route.js'
 import { connectDB } from "./lib/db.js";
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use("/api/products", productRouters); // "/api/auth/AuthRouters" -> /api/aut
 app.use("/api/cart", cartRouters);
 app.use("/api/coupons", couponRouters);
 app.use("/api/payments", paymentRouters);
+app.use("/api/analytics", analyticsRouters);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port} in active`);

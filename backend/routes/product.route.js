@@ -3,7 +3,7 @@ import{
     getAllProducts, 
     getFeaturedProducts,
     createProduct,deleteProduct, 
-    getRecommededProduct, 
+    getRecommendedProducts, 
     getProductsByCategory, 
     toggleFeaturedProduct }from '../controllers/product.controllers.js'
 

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import Product from './product.model';
+import Product from '../models/product.model.js';
 
 const userSchema = mongoose.Schema(
     {

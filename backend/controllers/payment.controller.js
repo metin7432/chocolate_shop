@@ -1,4 +1,4 @@
-import Coupon from '../models/coupon.model.js';
+import Coupon from '../models/coupon.models.js';
 import Order from '../models/order.model.js';
 import { stripe } from '../lib/stripe.js';
 
@@ -129,7 +129,14 @@ export const checkoutSuccess = async (req,res) => {
    }
 }
 
+async function createStripeCoupon(discountPercentage) {
+	const coupon = await stripe.coupons.create({
+		percent_off: discountPercentage,
+		duration: "once",
+	});
 
+	return coupon.id;
+}
 async function createNewCoupon(userId) {
     await Coupon.findOneAndDelete({userId});
     const newCoupon  = new Coupon({
@@ -141,4 +148,4 @@ async function createNewCoupon(userId) {
 
     await newCoupon.save();
     return newCoupon;
-}
+} 

@@ -1,0 +1,10 @@
+import axios from 'axios';
+
+
+const axiosInstance = axios.create({
+    baseUrl: import.meta.mode === "development" ? "http://localhost:5000/api" : "/api",
+    withCredentials: true // send cookies to the server
+});
+
+
+export default axiosInstance;

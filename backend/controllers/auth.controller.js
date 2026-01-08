@@ -1,4 +1,4 @@
-import { redis } from "../lib/redis.js";
+import  myredis  from "../lib/redis.js";
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -18,7 +18,7 @@ const generateTokens = (userId) => {
 };
 
 const storeRefreshToken = async (userId, refreshToken) => {
-	await redis.set(`refresh_token:${userId}`, refreshToken, "EX", 7 * 24 * 60 * 60); // 7days
+	await myredis.set(`refresh_token:${userId}`, refreshToken, "EX", 7 * 24 * 60 * 60); // 7days
 };
 
 // cookie metodu ile gerekli ayarlamalar yapmak
@@ -118,7 +118,7 @@ export const logout = async (req, res) => {
             //2 jwt dogrulamayla refreshToken ile secret degisgenini inject ederek karsilastirma
 			const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
             //3 decoded objesinden del metodunu alarak redis dbsinden tokenlari silme
-			await redis.del(`refresh_token:${decoded.userId}`);
+			await myredis.del(`refresh_token:${decoded.userId}`);
 		}
 
         //4cookileri silme
@@ -139,7 +139,7 @@ export const refreshToken = async (req,res) => {
 		return res.status(401).json({message: "No refresh token provided"});
 	};
 	const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET); // refreshToken ve secret kodunu dogrula
-	const storedToken = await redis.get(`refresh_token:${decoded.userId}`); // redisten userId vererek refreshTokeni bul ve ata
+	const storedToken = await myredis.get(`refresh_token:${decoded.userId}`); // redisten userId vererek refreshTokeni bul ve ata
 
 	if(storedToken !== refreshToken) {  //rediste tutulan refrestoken ile istekten gelen refresh token eslesiyor mu?
 		//eslesmiyor ise hata firlat

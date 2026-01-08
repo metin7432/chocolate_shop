@@ -1,6 +1,6 @@
 import {create} from 'zustand'; // state manager
 import axios from '../lib/axios';
-import {toast} from 'react-hot-toast';
+import {toast} from 'react-hot-toast'; 
 
 
 
@@ -24,7 +24,24 @@ export const useUserStore = create((set, get) => ({
 			set({ loading: false });
 			toast.error(error.response.data.message || "An error occurred");
 		}
+	},
+login: async ({email, password}) => {
+	set({loading: true});
+   try {
+	const res = await axios.post("/auth/login", {email, password}) 
+	set({user: res.data, loading:false});
+
+   } catch (error) {
+	set({ loading: false });
+			toast.error(error.response.data.message || "An error occurred");
+   }
+},
+logout: async () => {
+	try {
+		 await axios.post("/auth/logout");
+		 set({user: null});
+	} catch (error) {
+		toast.error(error.response.data.message || "An error occurred");
 	}
-
-
+}
 }))

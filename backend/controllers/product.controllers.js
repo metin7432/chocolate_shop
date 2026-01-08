@@ -1,7 +1,8 @@
 
-import { redis } from '../lib/redis.js'; // tokenları tuttuğumuz key value tabanlı server
+import myredis from '../lib/redis.js'; // tokenları tuttuğumuz key value tabanlı server
 import  cloudinary  from '../lib/cloudinary.js'; // resim barındırma
 import Product from './../models/product.model.js';
+
 
 
 export const getAllProducts = async(req,res) => {
@@ -20,7 +21,7 @@ export const getAllProducts = async(req,res) => {
 
 export const getFeaturedProducts = async (req,res) => {
 try {
-    let featuredProducts = await redis.get("featured_products");
+    let featuredProducts = await myredis.get("featured_products");
     if (featuredProducts) {
         return res.json(JSON.parse(featuredProducts))
     }
@@ -31,7 +32,7 @@ try {
     if (!featuredProducts) {
          res.status(404).json({message: "No featured products found"})
     }
-    await redis.set("featured_products", JSON.stringify(featuredProducts));
+    await myredis.set("featured_products", JSON.stringify(featuredProducts));
 
     res.json(featuredProducts)
 } catch (error) {
@@ -148,7 +149,7 @@ async function updateFeaturedProductsCache() {
 		// The lean() method  is used to return plain JavaScript objects instead of full Mongoose documents. This can significantly improve performance
 
 		const featuredProducts = await Product.find({ isFeatured: true }).lean();
-		await redis.set("featured_products", JSON.stringify(featuredProducts));
+		await myredis.set("featured_products", JSON.stringify(featuredProducts));
 	} catch (error) {
 		console.log("error in update cache function");
 	}

@@ -73,22 +73,12 @@ export const signup = async (req, res) => {
 // login metodu
 export const login = async (req, res) => {
 	try {
-        //1 gelen http istekten email ve password almak
 		const { email, password } = req.body;
-
-        //2 databaseden kulaniciyi bulma
 		const user = await User.findOne({ email });
 
-        // 3 istekten gelen password ile dbden gelen paswordu karsilastirma
-		if (user && (await user.comparePassword(password))) { // dogru ise
-
-            // 4 token olusturma metodundan verı alma
+		if (user && (await user.comparePassword(password))) {
 			const { accessToken, refreshToken } = generateTokens(user._id);
-
-            //5 usera ozel token tanımlama metodu
 			await storeRefreshToken(user._id, refreshToken);
-
-            //6 tokenları cookie aktarma metodu
 			setCookies(res, accessToken, refreshToken);
 
 			res.json({
@@ -97,14 +87,15 @@ export const login = async (req, res) => {
 				email: user.email,
 				role: user.role,
 			});
-		} else { //7 kullanıcı ve password hatası varsa
+		} else {
 			res.status(400).json({ message: "Invalid email or password" });
 		}
-	} catch (error) { //8 login controllerda hata varsa
+	} catch (error) {
 		console.log("Error in login controller", error.message);
 		res.status(500).json({ message: error.message });
 	}
 };
+
 // login end
 
 

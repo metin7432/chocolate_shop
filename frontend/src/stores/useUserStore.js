@@ -25,17 +25,21 @@ export const useUserStore = create((set, get) => ({
 			toast.error(error.response.data.message || "An error occurred");
 		}
 	},
-login: async ({email, password}) => {
-	set({loading: true});
+login: async (email, password) => {
+	set({loading: true}); //  loading devam etsin
    try {
-	const res = await axios.post("/auth/login", {email, password}) 
-	set({user: res.data, loading:false});
+	const res = await axios.post("/auth/login", {email, password}); // backende request atiliyor email ve pasword degerleri gonderiyor
+	
+	
+	set({user: res.data, loading:false}); // backenden donen deger set ediliyor
 
    } catch (error) {
-	set({ loading: false });
+	set({ loading: false }); //hata gelirse loading false cek
 			toast.error(error.response.data.message || "An error occurred");
    }
 },
+
+
 logout: async () => {
 	try {
 		 await axios.post("/auth/logout");
@@ -43,5 +47,18 @@ logout: async () => {
 	} catch (error) {
 		toast.error(error.response.data.message || "An error occurred");
 	}
-}
+},
+checkAuth: async () => {
+		set({ checkingAuth: true });
+		try {
+			const response = await axios.get("/auth/profile");
+			set({ user: response.data, checkingAuth: false });
+		} catch (error) {
+			console.log(error.message);
+			set({ checkingAuth: false, user: null });
+		}
+	},
+
+
+
 }))

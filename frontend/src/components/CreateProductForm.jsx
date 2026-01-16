@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { PlusCircle, Upload, Loader } from "lucide-react";
 import { useProductStore } from "../stores/useProductStore";
-const categories = ["Gofret", "Küp Çikolata", "Kutu Çikolata", "Top Çikolata", "Kare Çikolata", "Kare2 Çikolata", "Uzun Çikolata"];
+const categories = ["gofrets", "kupcikolata", "kutucikolata", "topcikolata", "karecikolata", "kare2cikolata", "uzuncikolata"];
 
 const CreateProductForm = () => {
     const [newProduct, setNewProduct] = useState({

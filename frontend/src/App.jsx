@@ -3,11 +3,13 @@ import {Navigate, Route, Routes}  from 'react-router';
 import HomePage from './pages/HomePage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
+import CategoryPage from './pages/CategoryPage.jsx';
 import Navbar from './components/Navbar';
 import {Toaster} from 'react-hot-toast';
 import { useUserStore } from "./stores/useUserStore";
 import LoadingSpinner from './components/LoadingSpinner';
 import AdminPage from './pages/AdminPage';
+import CartPage from './pages/CartPage.jsx';
 0
 function App() {
   const { user, checkAuth, checkingAuth } = useUserStore();
@@ -40,6 +42,8 @@ if(checkingAuth)  return <LoadingSpinner />
 						path='/secret-dashboard'
 						element={user?.role === "admin" ? <AdminPage /> : <Navigate to='/login' />}
 					/>
+        <Route path="/category/:category" element={<CategoryPage />} />
+          <Route path="/cart" element={<CartPage />} />
       </Routes>
       </div>
       <Toaster />

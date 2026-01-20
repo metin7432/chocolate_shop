@@ -75,12 +75,18 @@ export const useCartStore = create((set, get) => ({
 			get().removeFromCart(productId);
 			return;
 		}
+    console.log("pid",productId);
+	
+		try {
+			await axios.put(`/cart/${productId}`, { quantity });
 
-		await axios.put(`/cart/${productId}`, { quantity });
-		set((prevState) => ({
-			cart: prevState.cart.map((item) => (item._id === productId ? { ...item, quantity } : item)),
-		}));
-		get().calculateTotals();
+			set((prevState) => ({
+				cart: prevState.cart.map((item) => (item._id === productId ? { ...item, quantity } : item)),
+			}));
+			get().calculateTotals();
+		} catch (error) {
+			toast.error(error.response?.data?.message || "Failed to update quantity");
+		}
 	},
 	calculateTotals: () => {
 		const { cart, coupon } = get();

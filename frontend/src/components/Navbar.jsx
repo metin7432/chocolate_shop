@@ -37,7 +37,7 @@ const Navbar = () => {
 										className='absolute -top-2 -left-2 bg-emerald-500 text-white rounded-full px-2 py-0.5 
 									text-xs group-hover:bg-emerald-400 transition duration-300 ease-in-out'
 									>
-										{cart.length}
+										{cart[0].quantity}
 									</span>
 								)}
 							</Link>

@@ -10,13 +10,18 @@ import { useUserStore } from "./stores/useUserStore";
 import LoadingSpinner from './components/LoadingSpinner';
 import AdminPage from './pages/AdminPage';
 import CartPage from './pages/CartPage.jsx';
+import { useCartStore } from './stores/useCartStore.js';
 0
 function App() {
   const { user, checkAuth, checkingAuth } = useUserStore();
- 
+ const {getCartItems } = useCartStore()
 useEffect(()=>{
   checkAuth()
 },[checkAuth])
+
+useEffect(() => {
+    getCartItems();
+  }, [getCartItems]);
 
 if(checkingAuth)  return <LoadingSpinner />
   return (
@@ -43,7 +48,7 @@ if(checkingAuth)  return <LoadingSpinner />
 						element={user?.role === "admin" ? <AdminPage /> : <Navigate to='/login' />}
 					/>
         <Route path="/category/:category" element={<CategoryPage />} />
-          <Route path="/cart" element={<CartPage />} />
+         <Route path='/cart' element={user ? <CartPage /> : <Navigate to='/login' />} />
       </Routes>
       </div>
       <Toaster />

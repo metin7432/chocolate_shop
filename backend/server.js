@@ -16,7 +16,11 @@ dotenv.config();
 
 const app = express();
 
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
 
+const __dirname = path.dirname(__filename);
 const port = process.env.PORT || 5001;
 const dirname = path.resolve()
 app.use(express.json({limit: '50mb'}))

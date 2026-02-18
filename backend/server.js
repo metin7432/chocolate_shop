@@ -30,7 +30,7 @@ app.use("/api/coupons", couponRouters);
 app.use("/api/payments", paymentRouters);
 app.use("/api/analytics", analyticsRouters);
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV !== "production") {
     app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
     app.get("*", (req,res)=> {

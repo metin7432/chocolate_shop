@@ -9,7 +9,7 @@ import couponRouters from './routes/coupon.route.js'
 import paymentRouters from './routes/payment.route.js'
 import analyticsRouters from './routes/analytics.route.js'
 import { connectDB } from "./lib/db.js";
-
+import path from 'path'
 
 
 dotenv.config();

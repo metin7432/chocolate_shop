@@ -1,6 +1,10 @@
 import Coupon from '../models/coupon.models.js';
 import Order from '../models/order.model.js';
 import { stripe } from '../lib/stripe.js';
+import dotenv from "dotenv";
+
+dotenv.config();
+
 
 export const createCheckoutSession = async (req,res) => {
     try {
@@ -17,16 +21,16 @@ export const createCheckoutSession = async (req,res) => {
             totalAmount+= amount * product.quantity;
 
             return {
+                quantity: product.quantity || 1,
                 price_data: {
                     currency: "usd",
+                    unit_amount: amount,
                     product_data: {
                         name: product.name,
                         images:[product.name]
                     },
-                    unit_amount: amount,
 
                 },
-                quantity: product.quantity || 1
             };
         });
 
@@ -44,8 +48,8 @@ export const createCheckoutSession = async (req,res) => {
             payment_method_types: ["card"],
             line_items: lineItems,
             mode: "payment",
-            success_url: `${process.env.CLIENT_URL}/purchase-success?session_id={CHECKOUT_SESSION_ID} `,
-            cancel_url: `${process.env.CLIENT_URL}/purchase-cancel`,
+            success_url: `${process.env.CLIENT_URL}/purchase_success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${process.env.CLIENT_URL}/purchase_cancel`,
             discounts: coupon ? [
                                   {
                                     coupon: await createStripeCoupon(coupon.discountPercentage)
@@ -70,7 +74,7 @@ export const createCheckoutSession = async (req,res) => {
             await createNewCoupon(req.user._id);
         }
 
-        res.status(200).json({id: session.id, totalAmount: totalAmount / 100});
+        res.status(200).json({id: session.id,  totalAmount: totalAmount / 100});
 
 
 

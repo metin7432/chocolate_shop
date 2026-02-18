@@ -11,7 +11,9 @@ import LoadingSpinner from './components/LoadingSpinner';
 import AdminPage from './pages/AdminPage';
 import CartPage from './pages/CartPage.jsx';
 import { useCartStore } from './stores/useCartStore.js';
-0
+import PurchaseSuccessPage from './pages/PurchaseSuccessPage.jsx';
+import PurchaseCancelPage from './pages/PurchaseCancelPage.jsx';
+
 function App() {
   const { user, checkAuth, checkingAuth } = useUserStore();
  const {getCartItems } = useCartStore()
@@ -20,8 +22,9 @@ useEffect(()=>{
 },[checkAuth])
 
 useEffect(() => {
+  if(!user) return ;
     getCartItems();
-  }, [getCartItems]);
+  }, [getCartItems, user]);
 
 if(checkingAuth)  return <LoadingSpinner />
   return (
@@ -49,6 +52,8 @@ if(checkingAuth)  return <LoadingSpinner />
 					/>
         <Route path="/category/:category" element={<CategoryPage />} />
          <Route path='/cart' element={user ? <CartPage /> : <Navigate to='/login' />} />
+         <Route path='/purchase_success' element={user ? <PurchaseSuccessPage /> : <Navigate to='/login' />} />
+         <Route path='/purchase_cancel' element={user ? <PurchaseCancelPage /> : <Navigate to='/login' />} />
       </Routes>
       </div>
       <Toaster />

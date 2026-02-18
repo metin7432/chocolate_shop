@@ -2,10 +2,16 @@ import { Link } from "react-router";
 import { useCartStore } from "../stores/useCartStore";
 import { motion } from "framer-motion";
 import { ShoppingCart } from "lucide-react";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import CartItem from "../components/CartItem";
 import PeopleAlsoBought from "../components/PeopleAlsoBought";
 import OrderSummary from "../components/OrderSummary";
 import GiftCouponCard from "../components/GiftCouponCard";
+
+const stripePromise = loadStripe(
+	"pk_test_51SUriq4rfVZRzdXqsZyI90L5L9QfV41flg9LNHft3KIAAosOG0COIFiC61Il1XfdX4rBmlGSYOjFDEponoUBslem005940Ea0S"
+);
 
 const CartPage = () => {
 	const { cart } = useCartStore();
@@ -40,7 +46,9 @@ const CartPage = () => {
 							animate={{ opacity: 1, x: 0 }}
 							transition={{ duration: 0.5, delay: 0.4 }}
 						>
-							<OrderSummary />
+							<Elements stripe={stripePromise}>
+								<OrderSummary />
+							</Elements>
 							<GiftCouponCard />
 						</motion.div>
 					)}

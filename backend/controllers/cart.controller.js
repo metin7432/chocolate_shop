@@ -59,7 +59,7 @@ export const removeAllFromCart = async (req, res) => {
 };
 
 export const updateQuantity = async (req, res) => {
-	console.log("myrebo", req.body);
+	
 	
 	try {
 		const { id} = req.params;

@@ -9,7 +9,7 @@ import couponRouters from './routes/coupon.route.js'
 import paymentRouters from './routes/payment.route.js'
 import analyticsRouters from './routes/analytics.route.js'
 import { connectDB } from "./lib/db.js";
-import  path  from "path";
+
 
 
 dotenv.config();
@@ -36,6 +36,7 @@ app.use("/api/analytics", analyticsRouters);
     app.get("*", (req,res)=> {
         res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"))
     })
+
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port} in active`);
